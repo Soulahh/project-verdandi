@@ -7,26 +7,39 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class GuardianHandler(FileSystemEventHandler):
-    def __init__(self, pasta_destino,extensoes_permitidas,delay_backup):
+    def __init__(self, pasta_origem, pasta_destino,extensoes_permitidas,delay_backup):
         self.timers = {}
-        self.pasta_destino = pasta_destino
-        self.extensoes = extensoes_permitidas
+        self.pasta_origem = os.path.abspath(pasta_origem)
+        self.pasta_destino = os.path.abspath(pasta_destino) 
+        if not self.pasta_destino.endswith(os.sep):
+            self.pasta_destino += os.sep
+        self.extensoes = tuple(extensoes_permitidas)
         self.delay = float(delay_backup)
     
     def on_modified(self, event):
-       if event.is_directory:
-           return
+        if event.is_directory:
+            return
        
-       if not event.src_path.lower().endswith(self.extensoes):
-           return
-       arquivo = event.src_path
+        if not event.src_path.lower().endswith(self.extensoes):
+            return
+        arquivo = event.src_path
 
-       if arquivo in self.timers:
+        #Checa se a origem do evento bate com a pasta de origem
+        common_origin = os.path.commonpath([os.path.dirname(arquivo),self.pasta_origem])
+        if not (common_origin == os.path.dirname(arquivo) or common_origin == self.pasta_origem):
+           return
+        #Checa se o destino do backup bate com a origem, evitando loop infinito
+        common_destiny = os.path.commonpath([os.path.dirname(arquivo), self.pasta_destino])
+        if common_destiny == arquivo or common_destiny == self.pasta_destino:
+            return
+       
+
+        if arquivo in self.timers:
            self.timers[arquivo].cancel()
 
-       timer = threading.Timer(self.delay, self.realizar_backup, args=[arquivo])
-       timer.start()
-       self.timers[arquivo] = timer
+        timer = threading.Timer(self.delay, self.realizar_backup, args=[arquivo])
+        timer.start()
+        self.timers[arquivo] = timer
 
     def realizar_backup(self, caminho_arq_original):
         try:
