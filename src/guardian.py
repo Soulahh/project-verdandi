@@ -3,7 +3,6 @@ import os
 import time
 import shutil
 import threading
-from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class GuardianHandler(FileSystemEventHandler):
@@ -61,7 +60,9 @@ class GuardianHandler(FileSystemEventHandler):
         except Exception as e:
             print(f"[ERRO] Falha ao copiar {caminho_arq_original}: {e}")
 
-def iniciar_monitoramento(pasta_origem,pasta_destino,extensoes, delay):
+#TODO: Desacoplar essa lógica da guardian, ela precisa ir pra main
+#esse sendo o caso, posso tirar muitos dos imports daqui
+'''def iniciar_monitoramento(pasta_origem,pasta_destino,extensoes, delay):
     if not os.path.exists(pasta_destino):
         try:
             os.makedirs(pasta_destino)
@@ -71,7 +72,7 @@ def iniciar_monitoramento(pasta_origem,pasta_destino,extensoes, delay):
 
     print(f"Guardian online. Vigiando {pasta_origem}")
 
-    event_handler = GuardianHandler(pasta_destino,extensoes,delay)
+    event_handler = GuardianHandler(pasta_origem, pasta_destino,extensoes,delay)
     observer = Observer()
     observer.schedule(event_handler, pasta_origem, recursive=True)
     observer.start()
@@ -81,5 +82,5 @@ def iniciar_monitoramento(pasta_origem,pasta_destino,extensoes, delay):
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
-    observer.join()
+    observer.join()'''
 
