@@ -54,27 +54,3 @@ class GuardianHandler(FileSystemEventHandler):
         except Exception as e:
             print(f"[ERRO] Falha ao copiar {caminho_arq_original}: {e}")
 
-#TODO: Desacoplar essa lógica da guardian, ela precisa ir pra main
-#esse sendo o caso, posso tirar muitos dos imports daqui
-'''def iniciar_monitoramento(pasta_origem,pasta_destino,extensoes, delay):
-    if not os.path.exists(pasta_destino):
-        try:
-            os.makedirs(pasta_destino)
-        except OSError as e:
-            print(f"Erro ao criar {pasta_destino}:{e}")
-            return
-
-    print(f"Guardian online. Vigiando {pasta_origem}")
-
-    event_handler = GuardianHandler(pasta_origem, pasta_destino,extensoes,delay)
-    observer = Observer()
-    observer.schedule(event_handler, pasta_origem, recursive=True)
-    observer.start()
-
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()'''
-
