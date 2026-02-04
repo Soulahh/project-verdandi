@@ -10,8 +10,6 @@ class GuardianHandler(FileSystemEventHandler):
         self.timers = {}
         self.pasta_origem = os.path.abspath(pasta_origem)
         self.pasta_destino = os.path.abspath(pasta_destino) 
-        if not self.pasta_destino.endswith(os.sep):
-            self.pasta_destino += os.sep
         self.extensoes = tuple(extensoes_permitidas)
         self.delay = float(delay_backup)
     
@@ -23,10 +21,6 @@ class GuardianHandler(FileSystemEventHandler):
             return
         arquivo = event.src_path
 
-        #Checa se a origem do evento bate com a pasta de origem
-        common_origin = os.path.commonpath([os.path.dirname(arquivo),self.pasta_origem])
-        if not (common_origin == os.path.dirname(arquivo) or common_origin == self.pasta_origem):
-           return
         #Checa se o destino do backup bate com a origem, evitando loop infinito
         common_destiny = os.path.commonpath([os.path.dirname(arquivo), self.pasta_destino])
         if common_destiny == arquivo or common_destiny == self.pasta_destino:
@@ -47,12 +41,12 @@ class GuardianHandler(FileSystemEventHandler):
 
             nome_base, extensao = os.path.splitext(os.path.basename(caminho_arq_original))
             timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
-            novo_nome = f"{nome_base}_{timestamp}.{extensao}"
+            novo_nome = f"{nome_base}_{timestamp}{extensao}"
             caminho_final = os.path.join(self.pasta_destino,novo_nome)
             shutil.copy2(caminho_arq_original,caminho_final)
 
             if caminho_arq_original in self.timers:
-                del self.timers[caminho_arq_original]
+                self.timers.pop(caminho_arq_original, None)
             
             #TODO:Transformar prints em logging
             print(f"[SUCCESS] Backup salvo: {novo_nome}")
