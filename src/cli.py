@@ -1,17 +1,18 @@
+import copy
 class CLIManager():
     def __init__(self,default_config: dict):
-        self.config = default_config
+        self.config = copy.deepcopy(default_config)
         self.default = default_config
          
     def definir_configuracao(self,chave: str,novo_valor):
-        if chave not in self.config:
-            return
-        self.config[chave] = novo_valor
+        if chave in self.config:
+            self.config[chave] = novo_valor
         
     def retornar_valor(self, chave: str):
-        if chave not in self.config:
-            return None
-        return self.config[chave]
+        return self.config.get(chave)
 
     def restaurar_configuracao(self):
-        self.config = self.default
+        self.config = copy.deepcopy(self.default)
+
+    def restaurar_valor(self, chave: str):
+        self.config[chave] = copy.deepcopy(self.default[chave])
