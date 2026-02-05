@@ -1,12 +1,18 @@
 import json
 import os
 
+DEFAULT_CONFIG = {'origem':'./default/origem',
+                  'destino':'./default/destino',
+                  'extensoes_permitidas':['.psd','.jpg','.jpeg','.png'],
+                  'delay':2,
+                  'silent':False}
+
 class ConfigManager():
     def __init__(self):
         diretorio_atual = os.path.dirname(os.path.abspath(__file__))
         raiz_projeto = os.path.dirname(diretorio_atual)
         self.json_path = os.path.join(raiz_projeto,"config.json")
-        self.default = {'origem':'./default/origem','destino':'./default/destino','extensoes_permitidas':['.psd','.jpg','.jpeg','.png'],'delay':2,'silent':False}
+        self.default = DEFAULT_CONFIG
     def carregar_config(self):
         try:
             with open(self.json_path, "r") as f:
