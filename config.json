@@ -1,0 +1,14 @@
+{
+    "origem": "/home/tiago/Vídeos/pastaB",
+    "destino": "/home/tiago/Músicas/pastaA",
+    "extensoes": [
+        ".psd",
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".txt"
+    ],
+    "delay": 2,
+    "silent": true,
+    "mode": "script"
+}

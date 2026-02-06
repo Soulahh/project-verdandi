@@ -3,9 +3,10 @@ import os
 
 DEFAULT_CONFIG = {'origem':'./default/origem',
                   'destino':'./default/destino',
-                  'extensoes_permitidas':['.psd','.jpg','.jpeg','.png'],
+                  'extensoes':['.psd','.jpg','.jpeg','.png'],
                   'delay':2,
-                  'silent':False}
+                  'silent':False,
+                  'mode': 'interactive'}
 
 class ConfigManager():
     def __init__(self):
@@ -17,6 +18,8 @@ class ConfigManager():
         try:
             with open(self.json_path, "r") as f:
                 dados = json.load(f)
+                if dados is None:
+                    dados = self.default
                 return dados
         except FileNotFoundError:
             return self.default    

@@ -16,7 +16,7 @@ class GuardianHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if event.is_directory:
             return
-       
+
         if not event.src_path.lower().endswith(self.extensoes):
             return
         arquivo = event.src_path
