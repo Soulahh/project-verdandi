@@ -34,7 +34,3 @@ class CommandLineInterface():
             4 - Alterar Exibição de Interface
             5 - Alterar Delay
         """)
-cli = CommandLineInterface()
-cli.display_logo()
-cli.iniciar_menu()
-cli.exibir_opcoes()
