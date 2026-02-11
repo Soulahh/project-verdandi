@@ -10,5 +10,5 @@
     ],
     "delay": 2,
     "silent": true,
-    "mode": "script"
+    "mode": "interactive"
 }

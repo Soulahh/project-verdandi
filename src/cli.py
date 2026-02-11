@@ -8,7 +8,7 @@ class CLIManager():
         if chave in self.config:
             self.config[chave] = novo_valor
         
-    def retornar_valor(self, chave: str):
+    def retornar_configuracao(self, chave: str):
         return self.config.get(chave)
 
     def restaurar_configuracao(self):
