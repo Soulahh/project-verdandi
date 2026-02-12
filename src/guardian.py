@@ -3,10 +3,13 @@ import os
 import time
 import shutil
 import threading
+import logging
 from watchdog.events import FileSystemEventHandler
 
 class GuardianHandler(FileSystemEventHandler):
     def __init__(self, pasta_origem, pasta_destino,extensoes_permitidas,delay_backup):
+        if not os.path.exists(pasta_destino):
+            os.makedirs(pasta_destino)
         self.timers = {}
         self.pasta_origem = os.path.abspath(pasta_origem)
         self.pasta_destino = os.path.abspath(pasta_destino) 

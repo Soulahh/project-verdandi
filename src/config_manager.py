@@ -1,6 +1,7 @@
 import json
 import os
-
+import logging
+logger = logging.getLogger("verdandi")
 DEFAULT_CONFIG = {'origem':'./default/origem',
                   'destino':'./default/destino',
                   'extensoes':['.psd','.jpg','.jpeg','.png'],
@@ -24,7 +25,7 @@ class ConfigManager():
         except FileNotFoundError:
             return self.default    
         except json.JSONDecodeError as err:
-            print(f"[ERRO] Erro ao decodificar arquivo JSON (Formato inválido)\nCarregando configurações padrão")
+            logger.warning(f"[ERRO] Erro ao decodificar arquivo JSON (Formato inválido)\nCarregando configurações padrão")
             return self.default
 
     def salvar_config(self, dados: dict):

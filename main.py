@@ -3,6 +3,7 @@ import sys
 import time
 import argparse
 import copy
+import logging
 from watchdog.observers import Observer
 import src.guardian as gd
 import src.config_manager as cfm
@@ -65,6 +66,22 @@ def atualizar_guardian(guardian_instance, observer = None):
 
 
 if __name__ == "__main__":
+    logger = logging.getLogger("verdandi")
+    logger.setLevel(logging.DEBUG)
+
+    file_handler = logging.FileHandler("verdandi.log", encoding='utf-8')
+    file_handler.setLevel(logging.DEBUG)
+
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setLevel(logging.INFO)
+    
+    formatter = logging.Formatter('%(levelname)-7s: %(asctime)s - %(name)s -> %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    file_handler.setFormatter(formatter)
+    stream_handler.setFormatter(formatter)
+    
+    logger.addHandler(stream_handler)
+    logger.addHandler(file_handler)
+    logging.getLogger("watchdog").propagate = False
     config_manager = cfm.ConfigManager()
     dados_config = config_manager.carregar_config()
     parser = definir_parser()
@@ -74,6 +91,8 @@ if __name__ == "__main__":
     for argumento, valor in vars(args).items(): 
         if valor is not None:
             dados_config[argumento] = valor
+    if dados_config['silent'] == True:
+        stream_handler.setLevel(logging.WARNING)
     if dados_config['mode'] == 'interactive':
         continuar_menu = True
         while continuar_menu:
@@ -85,8 +104,9 @@ if __name__ == "__main__":
             match opcao:
                 case 1:
                     myGuardian = instanciar_guardian()
-                    print("Iniciando monitoramento!")
-                    print(f"Pasta Monitorada: {myGuardian.pasta_origem}")                    
+                    logger.info("Iniciando monitoramento!")
+                    logger.info(f"Pasta Monitorada: {myGuardian.pasta_origem}") 
+                    logger.info(f"Pressione CTRL+C para encerrar...")                  
                     iniciar_programa(myGuardian)
                 case 2:
                     alterar_setup(setup,"origem")
@@ -99,10 +119,10 @@ if __name__ == "__main__":
                 case 6:
                     alterar_setup(setup,"delay")
                 case 0:
-                    print("Encerrando o programa...")
+                    logger.info("Encerrando o programa...")
                     sys.exit(0)
                 case _:
-                    print("Comando inválido!")
+                    logger.error("Comando inválido!")
 
         #
     else:
