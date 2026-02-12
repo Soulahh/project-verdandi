@@ -16,3 +16,6 @@ class CLIManager():
 
     def restaurar_valor(self, chave: str):
         self.config[chave] = copy.deepcopy(self.default[chave])
+
+    def retornar_dicionario(self):
+        return self.config

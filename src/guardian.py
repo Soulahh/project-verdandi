@@ -5,7 +5,7 @@ import shutil
 import threading
 import logging
 from watchdog.events import FileSystemEventHandler
-
+logger = logging.getLogger("verdandi")
 class GuardianHandler(FileSystemEventHandler):
     def __init__(self, pasta_origem, pasta_destino,extensoes_permitidas,delay_backup):
         if not os.path.exists(pasta_destino):
@@ -51,9 +51,8 @@ class GuardianHandler(FileSystemEventHandler):
             if caminho_arq_original in self.timers:
                 self.timers.pop(caminho_arq_original, None)
             
-            #TODO:Transformar prints em logging
-            print(f"[SUCCESS] Backup salvo: {novo_nome}")
+            logger.info(f"[SUCCESS] Backup salvo: {novo_nome}")
 
         except Exception as e:
-            print(f"[ERRO] Falha ao copiar {caminho_arq_original}: {e}")
+            logger.warning(f"[ERRO] Falha ao copiar {caminho_arq_original}: {e}")
 

@@ -55,6 +55,10 @@ def instanciar_guardian():
         delay_backup=dados_config['delay'])
     return myGuardian
 
+def salvar_config_e_log(config_name):
+    config_manager.salvar_config(setup.retornar_dicionario())
+    logger.info(f"Configuração '{config_name}' atualizada e salva.")
+
 def atualizar_guardian(guardian_instance, observer = None):
     if observer is not None:
         observer.stop()
@@ -69,13 +73,13 @@ if __name__ == "__main__":
     logger = logging.getLogger("verdandi")
     logger.setLevel(logging.DEBUG)
 
-    file_handler = logging.FileHandler("verdandi.log", encoding='utf-8')
+    file_handler = logging.FileHandler("verdandi.log", encoding='utf-8', mode='a')
     file_handler.setLevel(logging.DEBUG)
 
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setLevel(logging.INFO)
     
-    formatter = logging.Formatter('%(levelname)-7s: %(asctime)s - %(name)s -> %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    formatter = logging.Formatter('%(levelname)-7s | %(asctime)s | %(name)-10s | %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     file_handler.setFormatter(formatter)
     stream_handler.setFormatter(formatter)
     
@@ -110,14 +114,19 @@ if __name__ == "__main__":
                     iniciar_programa(myGuardian)
                 case 2:
                     alterar_setup(setup,"origem")
+                    salvar_config_e_log("origem")
                 case 3:
                     alterar_setup(setup,"destino")
+                    salvar_config_e_log("destino")
                 case 4:
                     alterar_setup(setup,"extensoes")
+                    salvar_config_e_log("extensoes")
                 case 5:
                     alterar_setup(setup,"silent")
+                    salvar_config_e_log("silent")
                 case 6:
                     alterar_setup(setup,"delay")
+                    salvar_config_e_log("delay")
                 case 0:
                     logger.info("Encerrando o programa...")
                     sys.exit(0)

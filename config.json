@@ -1,14 +1,13 @@
 {
-    "origem": "/home/tiago/Vídeos/pastaB",
-    "destino": "/home/tiago/Músicas/pastaA",
+    "origem": "./default/origem",
+    "destino": "./default/destino",
     "extensoes": [
         ".psd",
         ".jpg",
         ".jpeg",
-        ".png",
-        ".txt"
+        ".png"
     ],
     "delay": 2,
-    "silent": true,
+    "silent": false,
     "mode": "interactive"
 }
